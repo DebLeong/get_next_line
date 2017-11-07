@@ -6,7 +6,7 @@
 /*   By: dleong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/06 21:41:44 by dleong            #+#    #+#             */
-/*   Updated: 2017/11/06 21:43:48 by dleong           ###   ########.fr       */
+/*   Updated: 2017/11/06 23:23:24 by dleong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int			get_next_line(const int fd, char **line)
 			if (result[fd][0] == '\0')
 				return (0);
 			*line = ft_strdup(result[fd]);
+			result[fd][0] = '\0';
 			return (1);
 		}
 	}
