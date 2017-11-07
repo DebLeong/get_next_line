@@ -6,7 +6,7 @@
 /*   By: dleong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/06 21:41:44 by dleong            #+#    #+#             */
-/*   Updated: 2017/11/06 23:23:24 by dleong           ###   ########.fr       */
+/*   Updated: 2017/11/07 13:13:03 by dleong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@ static int	ft_read(const int fd, char **result)
 	if ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
-		tmp = ft_strdup(*result);
-		ft_strdel(&(*result));
-		*result = ft_strjoin(tmp, buff);
+		tmp = *result;
+		*result = ft_strjoin(*result, buff);
 		ft_strdel(&tmp);
 	}
 	return (ret);
@@ -33,9 +32,8 @@ static void	fill_remain(char **result, char *newline)
 {
 	char	*tmp;
 
-	tmp = ft_strdup(newline + 1);
-	ft_strdel(&(*result));
-	*result = ft_strdup(tmp);
+	tmp = *result;
+	*result = ft_strdup(newline + 1);
 	ft_strdel(&tmp);
 }
 
@@ -47,6 +45,12 @@ static void	fill_remain(char **result, char *newline)
 ** subsequently, the fill_remain function copies content after the newline
 ** and store the content in the static variable result[fd]
 */
+
+static int	free_fd(char **result, int fd)
+{
+	ft_strdel(&(result[fd]));
+	return (0);
+}
 
 int			get_next_line(const int fd, char **line)
 {
@@ -65,7 +69,7 @@ int			get_next_line(const int fd, char **line)
 		if (read == 0 && !newline)
 		{
 			if (result[fd][0] == '\0')
-				return (0);
+				return (free_fd(result, fd));
 			*line = ft_strdup(result[fd]);
 			result[fd][0] = '\0';
 			return (1);
